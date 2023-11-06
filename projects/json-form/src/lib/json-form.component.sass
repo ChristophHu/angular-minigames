@@ -1,0 +1,26 @@
+.outline input:focus-within ~ label,
+.outline input:not(:placeholder-shown) ~ label
+    @apply transform scale-75 -translate-y-4 z-0 ml-3 px-1 py-0
+
+input:focus-within ~ label
+    @apply text-blue-500
+
+/* dropdown */
+.dropdown>ul
+    @apply hidden
+
+.dropdown.open>ul
+    @apply block
+
+input::file-selector-button
+    @apply h-full w-40 px-4 bg-gray-200 border-none
+
+.scrollbar-hide
+    -ms-overflow-style: none
+    scrollbar-width: none
+    overflow-y: scroll
+
+    &::-webkit-scrollbar
+        display: none
+        width: 0
+        height: 0

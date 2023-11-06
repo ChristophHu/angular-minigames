@@ -1,0 +1,16 @@
+<div class="flex overflow-x-auto h-16 mt-2 bg-gray-100 border border-gray-200 rounded scrollbar-hide" >
+    <div class="flex h-16 w-16 p-2 flex-shrink-0 justify-center" *ngFor="let image of images$ | async">
+        <img class="h-full cursor-pointer" [src]="image | sanitize:'url'" alt="Image Source"  (click)="openImage(image)">
+        <!-- <img class="rounded" [src]="image.src" [alt]="image.alt"> -->
+    </div>
+</div>
+
+<section *ngIf="showModal" class="fixed inset-0 overflow-hidden">
+  <div class="min-h-screen bg-gray-800 bg-opacity-90 z-40" @fadeIn @fadeOut (click)="close()"></div>
+  <div *ngIf="showModal" (click)="$event.stopPropagation()" @fadeInTop @fadeOutTop class="z-60 absolute flex top-4 right-4 left-4 lg:top-12 lg:right-12 lg:left-12 justify-center bg-gray-800 dark:text-gray-50 rounded-lg shadow-lg">
+      <div class="absolute top-2 right-2 h-6 w-6 stroke-2 text-gray-400 cursor-pointer" (click)="close()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round" /><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </div>
+    <img class="object-contain object-center w-96 m-2" [src]="selectedImage | sanitize:'url'" alt="Image Source">
+  </div>
+</section>

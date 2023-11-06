@@ -1,0 +1,211 @@
+<div class="flex flex-grow px-4 mb-2 overflow-y-auto scrollbar-hide" cdk-scrollable #scrollableContent>
+    <form [formGroup]="dynamicForm" class="w-full">
+        <ng-container *ngFor="let control of formContent">
+            <!-- input -->
+            <ng-container *ngIf="control.type === 'input'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="control.hidden ? 'hidden' : ''">
+                    <label class="my-2 text-sm leading-none text-light">{{ control.label }}</label>
+                    <div class="relative mt-1 flex items-center">
+                        <input type="{{control.type}}" [formControlName]="control.key" mask="{{control.mask}}" class="w-full p-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-light disabled:text-gray-400 disabled:pointer-events-none" placeholder="{{control.placeholder}}" />
+                        <div *ngIf="!control.disabled" class="absolute h-full flex flex-row inset-y-0 right-2 items-center text-gray-500">
+                            <div class="w-5 ml-2 stroke-2 cursor-pointer" (click)="delete(control.key)">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('email')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} must be a valid email-address.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('max')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} can be max {{ control.validators | indexOfObjectValue:'max' }}.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('min')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} can be min {{ control.validators | indexOfObjectValue:'min' }}.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('maxlength')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} can be max {{ control.validators | indexOfObjectValue:'maxlength' }} char long.</div> 
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('minlength') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} must be {{ control.validators | indexOfObjectValue:'minlength' }} char long.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('required') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} is required</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('invalidZip')  && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">Invalid zip-code.</div> 
+                </div>
+            </ng-container>
+
+            <!-- password -->
+            <ng-container *ngIf="control.type === 'password'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="control.hidden ? 'hidden' : ''">
+                    <label class="my-2 text-sm leading-none text-light">{{ control.label }}</label>
+                    <div class="relative mt-1 flex items-center">
+                        <input type="{{ control.show ? 'text' : 'password' }}" [formControlName]="control.key" class="w-full p-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-light" placeholder="{{control.placeholder}}" />
+                        <span *ngIf="control.show" class="absolute h-5 w-5 right-2 stroke-2 text-gray-500 cursor-pointer" (click)="control.show =!control.show">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path></svg>
+                        </span>
+                        <span *ngIf="!control.show" class="absolute h-5 w-5 right-2 stroke-2 text-gray-500 cursor-pointer" (click)="control.show =!control.show">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"></path><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87"></path><path d="M3 3l18 18"></path></svg>
+                        </span>
+                    </div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('maxlength')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} can be max {{ control.validators | indexOfObjectValue:'maxlength' }} char long.</div> 
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('minlength') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} must be {{ control.validators | indexOfObjectValue:'minlength' }} char long.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('required') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} is required</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('hasNumber') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} has no number.</div> 
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('hasSpecial') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} has no special char.</div> 
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('hasLower') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} has no lower char.</div> 
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('hasUpper') && dynamicForm.get(control.key)?.touched && dynamicForm.get(control.key)?.dirty" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} has no upper char.</div> 
+                </div>
+            </ng-container>
+
+            <!-- textarea -->
+            <ng-container *ngIf="control.type === 'textarea'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="{ 'hidden': control.hidden }">
+                    <label class="my-2 text-sm leading-none text-light">{{ control.label }}</label>
+                    <div class="w-full mt-1 bg-gray-100 rounded">
+                        <div class="relative h-12 w-full" resizeable>
+                            <textarea [formControlName]="control.key" class="absolute h-full w-full pt-3 px-3 bg-transparent focus:ring-px focus:ring-gray-600 text-sm font-medium leading-none text-light rounded scrollbar-hide" id="" cols="30" rows="3" placeholder="{{control.placeholder}}"></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('email')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} must be a valid email-address.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('max')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} can be max {{ control.validators | indexOfObjectValue:'max' }}.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('min')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} can be min {{ control.validators | indexOfObjectValue:'min' }}.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('maxlength')" class="px-3 text-red-400 pt-1 pb-2 text-sm">{{ control.label }} can be max {{ control.validators | indexOfObjectValue:'maxlength' }} char long.</div> 
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('minlength') && dynamicForm.get(control.key)?.touched" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} must be {{ control.validators | indexOfObjectValue:'minlength' }} char long.</div>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('required') && dynamicForm.get(control.key)?.touched" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} is required</div>
+                </div>
+            </ng-container>
+
+            <!-- select -->
+            <ng-container *ngIf="control.type === 'select'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="control.hidden ? 'hidden' : ''">
+                    <label class="my-2 mr-3 text-sm leading-none text-light">{{ control.label }}</label>
+                    <mat-select [formControlName]="control.key" [(value)]="control.key" class="relative w-full py-3 mt-1 bg-gray-100 rounded focus:outline-none text-sm font-medium leading-none text-light">
+                        <mat-option *ngFor="let option of control.options" [value]="option.value">{{ option.label }}</mat-option>
+                    </mat-select>
+                </div>
+            </ng-container>
+
+            <!-- custom select -->
+            <ng-container *ngIf="control.type === 'searchselect'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="control.hidden ? 'hidden' : ''">
+                    <label class="my-2 mr-3 text-sm leading-none text-light">{{ control.label }}</label>
+                    <select-dropdown [formControlName]="control.key" [multiple]="false" [options]="options" [config]="config"></select-dropdown>
+                </div>
+            </ng-container>
+            <!-- <ng-container *ngIf="control.type === 'select'">
+                <div class="rounded-full"></div>
+                <div class="flex flex-col w-full">
+                    <label class="mr-3 text-sm leading-none text-light">{{ control.label }}</label>
+                    <app-custom-select [formControlName]="control.key" [options]="control.options"></app-custom-select>
+                </div>
+
+                <selection [formControlName]="control.key" [items]="control.options"></selection>
+            </ng-container> -->
+
+            <!-- depending select -->
+            <ng-container *ngIf="control.type === 'dependedselect'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="control.hidden ? 'hidden' : ''">
+                    <label class="my-2 mr-3 text-sm leading-none text-light">{{ control.label }}</label>
+                    <mat-select [formControlName]="control.key" [(value)]="control.key" class="relative w-full py-3 mt-1 bg-gray-100 rounded focus:outline-none text-sm font-medium leading-none text-light">
+                        <mat-option *ngFor="let option of control.dependedOptions$ | async" [value]="option.value">{{ option.label }}</mat-option>
+                    </mat-select>
+                    <div *ngIf="dynamicForm.get(control.key)?.hasError('required') && dynamicForm.get(control.key)?.touched" class="px-3 text-red-400 pt-1 pb-2 text-sm">A {{ control.label }} is required</div>
+                </div>
+            </ng-container>
+
+            <!-- checkbox -->
+            <ng-container *ngIf="control.type === 'checkbox'">
+                <div class="flex items-center w-full mt-2" [ngClass]="control.hidden ? 'hidden' : ''">
+                    <div class="my-2 mr-2 bg-white dark:bg-gray-800 rounded-sm w-5 h-5 flex flex-shrink-0 justify-center items-center relative">
+                        <input type="checkbox" [formControlName]="control.key" class="w-full h-full focus:outline-none cursor-pointer" [checked]="control.defaultValue" />
+                    </div>
+                    <label class="text-sm leading-none text-light">{{ control.label }}</label>
+                </div>
+            </ng-container>
+
+            <!-- toggle -->
+            <ng-container *ngIf="control.type === 'toggle'">
+                <div class="flex items-center w-full mt-2" [ngClass]="control.hidden ? 'hidden' : ''">
+                    <toggle [formControlName]="control.key" [value]="control.defaultValue" />
+                    <label class="ml-2 text-sm leading-none text-light">{{ control.label }}</label>
+                </div>
+            </ng-container>
+            
+
+            <!-- radio -->
+            <ng-container *ngIf="control.type === 'radio'">
+                <div class="flex items-center w-full mt-2">
+                    <label class="my-2 mr-2 text-sm leading-4 font-normal text-light dark:text-gray-100">{{ control.label }}</label>
+                    <div class="mr-4 bg-white dark:bg-gray-100 rounded-full flex flex-shrink-0 justify-center items-center relative" *ngFor="let opt of control.options">{{ opt }}
+                        <input type="radio" [formControlName]="control.key" class="w-5 h-5 ml-2 focus:outline-none border rounded-full border-gray-400 cursor-pointer" [value]="opt">
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- radio vertical -->
+            <ng-container *ngIf="control.type === 'radio'">
+                <div class="flex flex-col w-full mt-2">
+                    <label class="my-2 mb-2 text-sm leading-4 font-normal text-light dark:text-gray-100">{{ control.label }}</label>
+                    <div class="relative flex items-center mr-4 mb-2 bg-white dark:bg-gray-100 rounded-full" *ngFor="let opt of control.options">{{ opt }}
+                        <input type="radio" [formControlName]="control.key" class="w-5 h-5 ml-2 focus:outline-none border rounded-full border-gray-400 cursor-pointer" [value]="opt" readonly />
+                    </div>
+                </div>
+            </ng-container>
+
+            <!-- datetimes -->
+            <ng-container *ngIf="control.type === 'datetime-local'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="{ 'hidden': control.hidden }">
+                    <label class="my-2 text-sm leading-none text-light">{{ control.label }}</label>
+                    <input type="datetime-local" [formControlName]="control.key" value="{{ dynamicForm.value[control.key] | date:'yyyy-MM-dd HH:mm' }}" class="w-full p-3 mt-1 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-light disabled:text-gray-400 disabled:pointer-events-none" placeholder="{{ control.placeholder }}" />
+                </div>
+            </ng-container>
+
+            <!-- fileupload -->
+            <ng-container *ngIf="control.type === 'fileupload'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="{ 'hidden': control.hidden }">
+                    <label class="my-2 text-sm leading-none text-light">{{ control.label }}</label>
+                    <input type="file" [formControlName]="control.key" [multiple]="control.multiple" class="relative flex h-10 w-full mt-1 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-light" placeholder="{{ control.placeholder }}" (change)="fileChangeEvent($event)" />
+                </div>
+                <ng-container *ngIf="control.multiple && toUploadFilesList.length > 0">
+                    <div class="flex flex-col min-w-full max-h-48 -mt-1 mb-2 border border-gray-200 rounded-b overflow-y-scroll scrollbar-hide z-20">
+                        <div class="flex h-20 p-2" *ngFor="let item of toUploadFilesList; index as index">
+                            <div class="flex flex-col w-full">
+                                <div class="flex justify-between items-center w-full">
+                                    <div class="items-center text-gray-600 dark:text-gray-400 flex">
+                                        <img class="h-8 w-8 rounded" [src]="toUploadBase64List[index] | sanitize:'url'">
+                                        <p class="text-gray-800 font-normal text-base tracking-normal ml-2 mr-4">{{ item.file.name }}</p>
+                                    </div>
+                                    <div class="flex flex-row space-x-5 items-center cursor-pointer text-gray-400">
+                                        <p class="text-gray-600 dark:text-gray-400 font-normal text-base tracking-normal">{{ item.uploadStatus.progressCount }}%</p>
+                                        <div class="h-4 w-4 stroke-2 cursor-pointer" (click)="deleteImage(index)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18" stroke-linecap="round" stroke-linejoin="round" /><path d="M6 6L18 18" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative mb-2 mt-2">
+                                    <hr class="h-1 rounded-sm bg-gray-200" />
+                                    <hr class="absolute top-0 h-1 rounded-sm bg-indigo-700" [ngStyle]="{'width': item.uploadStatus.progressCount+'%'}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button class="w-40 p-2 bg-blue-200 rounded" (click)="uploadFiles()">Upload Files</button>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!control.multiple && toUploadFilesList">
+                    Single
+                </ng-container>
+            </ng-container>
+
+            <!-- galery -->
+            <ng-container *ngIf="control.type === 'imageslider'">
+                <div class="flex flex-col w-full mt-2" [ngClass]="{ 'hidden': control.hidden }">
+                    <label class="my-2 text-sm leading-none text-light">{{ control.label }}</label>
+                    <image-thumbnail></image-thumbnail>
+                </div>
+            </ng-container>
+            
+            <!-- signature -->
+            <ng-container *ngIf="control.type === 'signature'">
+                <!-- <pre class="">{{ control | json }}</pre> -->
+                <!-- <div class="flex flex-col w-full mt-2" [ngClass]="{ 'hidden': control.hidden || (getAnswer(control.key).value | async) }"> -->
+                <div class="flex flex-col w-full mt-2" *hidden="control.hidden || isHiddenRule(control)">
+                    <!-- <label class="my-2 text-sm leading-none text-light">{{ (control.label | async) }}</label> -->
+                    <label class="my-2 text-sm leading-none text-light">{{ control.label }}</label>
+                    <signature formControlName="signature"></signature>
+                </div>
+            </ng-container>
+        </ng-container>
+    </form>
+</div>
+<!-- <scroll-indicator [scrollableContent]="scrollableContent" [distance]="16"></scroll-indicator> -->

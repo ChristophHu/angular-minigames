@@ -1,0 +1,27 @@
+// label
+//   @apply m-0 p-0 border-0
+
+// .switch
+//   @apply relative inline-block align-middle cursor-pointer
+
+  // .switch-input
+  //   @apply absolute opacity-0 w-px h-px
+
+  .switch-core
+    // @apply relative block flex w-12 h-[22px] m-0 items-center rounded-full bg-gray-200 transition-colors duration-200 ease-in-out
+
+    // .switch-button
+    //   @apply relative block top-0 left-0 m-[2px] bg-white rounded-full overflow-hidden transition-all duration-200 ease-in-out
+
+  // &.disabled
+  //   @apply opacity-60 pointer-events-none
+
+input:checked
+  + .switch-core
+    // @apply bg-blue-500
+    background-color: rgb(59, 130, 246)
+
+    .switch-button
+      // @apply transform translate-x-6
+      transform: translateX(1.5rem)
+

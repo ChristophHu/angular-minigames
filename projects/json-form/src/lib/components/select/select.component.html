@@ -1,0 +1,8 @@
+<select [value]="selectedItem" (change)="change($event)">
+  <!-- <option [value]="0">Select ...</option> -->
+  <option *ngFor="let item of items" [value]="item.value">{{ item.label }}</option>
+</select>
+
+<!-- <div>
+  {{ selectedItems | json}}
+</div> -->

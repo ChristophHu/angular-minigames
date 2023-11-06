@@ -1,0 +1,12 @@
+<div *ngIf="(isPaused$ | async)" class="absolute inset-0 bg-black opacity-70" (click)="pauseGame(false)">
+    Test
+</div>
+
+<div *ngIf="!(isRunning$ | async)">
+    <json-form [formContent]="formContent" (formValue)="valueChanges($event)" (formStatus)="statusChanges($event)"></json-form>
+    <button class="p-2 bg-blue-400 rounded" (click)="startGame()">Start</button>
+</div>
+
+<div *ngIf="(isRunning$ | async)">
+    <button class="p-2 bg-blue-400 rounded" (click)="pauseGame(true)">Pause</button>
+</div>

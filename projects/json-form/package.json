@@ -1,0 +1,32 @@
+{
+  "name": "@christophhu/json-form",
+  "version": "1.0.22",
+  "description": "Create Angular reactive forms by a JSON Schema.",
+  "license": "MIT",
+  "author": {
+    "name": "Christoph Huschenhoefer",
+    "email": "christoph@lab-code.de"
+  },
+  "keywords": [
+    "angular",
+    "reactive-forms",
+    "JSON Schema"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^15.1.0",
+    "@angular/core": "^15.1.0",
+    "signature_pad": "4.1.6"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChristophHu/angular-json-form-package.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ChristophHu/angular-json-form-package/issues"
+  },
+  "homepage": "https://github.com/ChristophHu/angular-json-form-package#readme",
+  "sideEffects": false
+}
